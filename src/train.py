@@ -89,7 +89,7 @@ def train_model(X_train, y_train):
     """
     logger.info("Training Decision Tree Classifier")
     
-    model = DecisionTreeClassifier(max_depth=2, random_state=1)
+    model = DecisionTreeClassifier(max_depth=3, random_state=1)
     model.fit(X_train, y_train)
     
     logger.info("Model training completed")
@@ -149,8 +149,9 @@ def main():
     # Evaluate model
     accuracy = evaluate_model(model, X_test, y_test)
     
-    # Save model
+    # Save model in multiple locations to ensure it's accessible
     save_model(model, "../model.joblib")
+    save_model(model, "model.joblib")  # Also save in current directory
     
     # Save model metadata
     metadata = {
@@ -159,9 +160,13 @@ def main():
         'classes': model.classes_.tolist()
     }
     
-    # Save metadata as JSON
+    # Save metadata as JSON in multiple locations
     import json
     with open('../model_metadata.json', 'w') as f:
+        json.dump(metadata, f, indent=2)
+    
+    # Also save in current directory
+    with open('model_metadata.json', 'w') as f:
         json.dump(metadata, f, indent=2)
     
     logger.info("Training pipeline completed successfully")
