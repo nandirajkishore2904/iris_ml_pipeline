@@ -150,7 +150,7 @@ def main():
     accuracy = evaluate_model(model, X_test, y_test)
     
     # Save model in multiple locations to ensure it's accessible
-    save_model(model, "../model.joblib")
+    #save_model(model, "../model.joblib")
     save_model(model, "model.joblib")  # Also save in current directory
     
     # Save model metadata
