@@ -101,7 +101,7 @@ def test_model_structure():
 
 def test_data_exists():
     """Test if the dataset file exists"""
-    assert os.path.exists('src/iris.csv'), "Dataset file not found"
+    assert os.path.exists('../src/iris.csv'), "Dataset file not found"
     
 def test_data_format():
     """Test if the dataset has the expected format"""
