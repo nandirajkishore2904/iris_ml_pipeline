@@ -13,7 +13,7 @@ def main():
     print("Generating model performance metrics...")
     
     # Try different possible paths for the model file
-    model_paths = ['model.joblib', '../model.joblib', './model.joblib']
+    model_paths = ['model.joblib']
     model = None
     
     for path in model_paths:
@@ -29,7 +29,7 @@ def main():
         raise FileNotFoundError("Could not find model.joblib in any of the expected locations")
     
     # Try different possible paths for the dataset
-    data_paths = ['iris.csv', 'src/iris.csv', './iris.csv', '../src/iris.csv']
+    data_paths = ['iris.csv']
     data = None
     
     for path in data_paths:
