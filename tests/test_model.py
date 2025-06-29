@@ -12,19 +12,61 @@ EXPECTED_CLASSES = ['setosa', 'versicolor', 'virginica']
 
 def test_model_exists():
     """Test if model file exists and loads correctly"""
-    model = joblib.load('model.joblib')
+    # Try different possible paths for the model file
+    model_paths = ['model.joblib', '../model.joblib', './model.joblib']
+    model = None
+    
+    for path in model_paths:
+        try:
+            print(f"Trying to load model from: {path}")
+            model = joblib.load(path)
+            print(f"Successfully loaded model from: {path}")
+            break
+        except FileNotFoundError:
+            print(f"Model not found at: {path}")
+    
+    assert model is not None, "Could not find model.joblib in any of the expected locations"
     assert isinstance(model, DecisionTreeClassifier)
     
-    # Check if metadata file exists
-    assert os.path.exists('model_metadata.json'), "Model metadata file not found"
+    # Check if metadata file exists in any of the expected locations
+    metadata_paths = ['model_metadata.json', '../model_metadata.json', './model_metadata.json']
+    metadata_exists = False
+    
+    for path in metadata_paths:
+        if os.path.exists(path):
+            metadata_exists = True
+            print(f"Found metadata file at: {path}")
+            break
+    
+    assert metadata_exists, "Model metadata file not found in any of the expected locations"
 
 def test_model_accuracy():
     """Test if model has reasonable accuracy"""
-    # Load model
-    model = joblib.load('model.joblib')
+    # Try different possible paths for the model file
+    model_paths = ['model.joblib', '../model.joblib', './model.joblib']
+    model = None
     
-    # Load test data
-    data = pd.read_csv('src/iris.csv')
+    for path in model_paths:
+        try:
+            model = joblib.load(path)
+            break
+        except FileNotFoundError:
+            continue
+    
+    assert model is not None, "Could not find model.joblib in any of the expected locations"
+    
+    # Try different possible paths for the dataset
+    data_paths = ['iris.csv', 'src/iris.csv', './iris.csv', '../src/iris.csv']
+    data = None
+    
+    for path in data_paths:
+        try:
+            data = pd.read_csv(path)
+            break
+        except FileNotFoundError:
+            continue
+    
+    assert data is not None, "Could not find iris.csv in any of the expected locations"
     train, test = train_test_split(data, test_size=0.4, stratify=data['species'], random_state=42)
     X_test = test[['sepal_length','sepal_width','petal_length','petal_width']]
     y_test = test.species
@@ -38,7 +80,18 @@ def test_model_accuracy():
 
 def test_model_structure():
     """Test if model has expected structure"""
-    model = joblib.load('model.joblib')
+    # Try different possible paths for the model file
+    model_paths = ['model.joblib', '../model.joblib', './model.joblib']
+    model = None
+    
+    for path in model_paths:
+        try:
+            model = joblib.load(path)
+            break
+        except FileNotFoundError:
+            continue
+    
+    assert model is not None, "Could not find model.joblib in any of the expected locations"
     
     # Check max depth is 3 as specified in training
     assert model.max_depth == 3, f"Expected max_depth=3, got {model.max_depth}"
@@ -81,7 +134,18 @@ def test_data_quality():
 
 def test_model_predictions_shape():
     """Test if model predictions have the expected shape"""
-    model = joblib.load('model.joblib')
+    # Try different possible paths for the model file
+    model_paths = ['model.joblib', '../model.joblib', './model.joblib']
+    model = None
+    
+    for path in model_paths:
+        try:
+            model = joblib.load(path)
+            break
+        except FileNotFoundError:
+            continue
+    
+    assert model is not None, "Could not find model.joblib in any of the expected locations"
     
     # Create a sample input with the correct shape
     sample_input = pd.DataFrame({
