@@ -136,8 +136,6 @@ def save_model(model, filepath):
 def main():
     """Main function to orchestrate the training process."""
     # Ensure we're in the right directory
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(script_dir)
     
     # Load and process data
     data = load_data('iris.csv')
