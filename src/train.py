@@ -89,7 +89,7 @@ def train_model(X_train, y_train):
     """
     logger.info("Training Decision Tree Classifier")
     
-    model = DecisionTreeClassifier(max_depth=3, random_state=1)
+    model = DecisionTreeClassifier(max_depth=2, random_state=1)
     model.fit(X_train, y_train)
     
     logger.info("Model training completed")
