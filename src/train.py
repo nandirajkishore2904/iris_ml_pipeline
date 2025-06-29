@@ -162,8 +162,6 @@ def main():
     
     # Save metadata as JSON in multiple locations
     import json
-    with open('../model_metadata.json', 'w') as f:
-        json.dump(metadata, f, indent=2)
     
     # Also save in current directory
     with open('model_metadata.json', 'w') as f:
