@@ -12,11 +12,37 @@ plt.style.use('ggplot')
 def main():
     print("Generating model performance metrics...")
     
-    # Load the trained model
-    model = joblib.load('../model.joblib')
+    # Try different possible paths for the model file
+    model_paths = ['model.joblib', '../model.joblib', './model.joblib']
+    model = None
     
-    # Load the dataset
-    data = pd.read_csv('iris.csv')
+    for path in model_paths:
+        try:
+            print(f"Trying to load model from: {path}")
+            model = joblib.load(path)
+            print(f"Successfully loaded model from: {path}")
+            break
+        except FileNotFoundError:
+            print(f"Model not found at: {path}")
+    
+    if model is None:
+        raise FileNotFoundError("Could not find model.joblib in any of the expected locations")
+    
+    # Try different possible paths for the dataset
+    data_paths = ['iris.csv', 'src/iris.csv', './iris.csv', '../src/iris.csv']
+    data = None
+    
+    for path in data_paths:
+        try:
+            print(f"Trying to load data from: {path}")
+            data = pd.read_csv(path)
+            print(f"Successfully loaded data from: {path}")
+            break
+        except FileNotFoundError:
+            print(f"Data not found at: {path}")
+    
+    if data is None:
+        raise FileNotFoundError("Could not find iris.csv in any of the expected locations")
     
     # Split the data the same way as in training
     train, test = train_test_split(data, test_size=0.4, stratify=data['species'], random_state=42)
@@ -41,18 +67,33 @@ def main():
     
     # Save the confusion matrix
     plt.tight_layout()
-    plt.savefig('../metrics.png')
+    plt.savefig('metrics.png')
     print("Saved confusion matrix to metrics.png")
     
     # Generate classification report
     report = classification_report(y_test, y_pred, target_names=class_names)
     
     # Save classification report to a file
-    with open('../classification_report.txt', 'w') as f:
+    with open('classification_report.txt', 'w') as f:
         f.write(report)
     
     # Append classification report to the markdown report
-    with open('../report.md', 'a') as f:
+    try:
+        with open('report.md', 'a') as f:
+            f.write("### Classification Report\n")
+            f.write("```\n")
+            f.write(report)
+            f.write("```\n\n")
+        print("Classification report appended to report.md")
+    except FileNotFoundError:
+        # Create the file if it doesn't exist
+        with open('report.md', 'w') as f:
+            f.write("# Model Performance Report\n\n")
+            f.write("### Classification Report\n")
+            f.write("```\n")
+            f.write(report)
+            f.write("```\n\n")
+        print("Created report.md with classification report")
         f.write("### Classification Report\n")
         f.write("```\n")
         f.write(report)
@@ -69,9 +110,9 @@ def main():
         sns.barplot(x=features, y=importances)
         plt.title('Feature Importance')
         plt.tight_layout()
-        plt.savefig('../feature_importance.png')
+        plt.savefig('feature_importance.png')
         
-        with open('../report.md', 'a') as f:
+        with open('report.md', 'a') as f:
             f.write("### Feature Importance\n")
             f.write("![Feature Importance](feature_importance.png)\n\n")
         
