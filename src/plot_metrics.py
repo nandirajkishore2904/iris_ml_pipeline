@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
 
@@ -13,7 +14,13 @@ def main():
     print("Generating model performance metrics...")
     
     # Try different possible paths for the model file
-    model_paths = ['model.joblib']
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(script_dir)
+    model_paths = [
+        os.path.join(script_dir, 'model.joblib'),
+        os.path.join(root_dir, 'model.joblib'),
+        'model.joblib'
+    ]
     model = None
     
     for path in model_paths:
@@ -29,7 +36,13 @@ def main():
         raise FileNotFoundError("Could not find model.joblib in any of the expected locations")
     
     # Try different possible paths for the dataset
-    data_paths = ['iris.csv']
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(script_dir)
+    data_paths = [
+        os.path.join(script_dir, 'iris.csv'),
+        os.path.join(root_dir, 'src', 'iris.csv'),
+        'iris.csv'
+    ]
     data = None
     
     for path in data_paths:
@@ -67,19 +80,25 @@ def main():
     
     # Save the confusion matrix
     plt.tight_layout()
-    plt.savefig('metrics.png')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(script_dir)
+    plt.savefig(os.path.join(root_dir, 'metrics.png'))
     print("Saved confusion matrix to metrics.png")
     
     # Generate classification report
     report = classification_report(y_test, y_pred, target_names=class_names)
     
     # Save classification report to a file
-    with open('classification_report.txt', 'w') as f:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(script_dir)
+    with open(os.path.join(root_dir, 'classification_report.txt'), 'w') as f:
         f.write(report)
     
     # Append classification report to the markdown report
     try:
-        with open('report.md', 'a') as f:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.dirname(script_dir)
+        with open(os.path.join(root_dir, 'report.md'), 'a') as f:
             f.write("### Classification Report\n")
             f.write("```\n")
             f.write(report)
@@ -87,7 +106,9 @@ def main():
         print("Classification report appended to report.md")
     except FileNotFoundError:
         # Create the file if it doesn't exist
-        with open('report.md', 'w') as f:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.dirname(script_dir)
+        with open(os.path.join(root_dir, 'report.md'), 'w') as f:
             f.write("# Model Performance Report\n\n")
             f.write("### Classification Report\n")
             f.write("```\n")
@@ -110,9 +131,11 @@ def main():
         sns.barplot(x=features, y=importances)
         plt.title('Feature Importance')
         plt.tight_layout()
-        plt.savefig('feature_importance.png')
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.dirname(script_dir)
+        plt.savefig(os.path.join(root_dir, 'feature_importance.png'))
         
-        with open('report.md', 'a') as f:
+        with open(os.path.join(root_dir, 'report.md'), 'a') as f:
             f.write("### Feature Importance\n")
             f.write("![Feature Importance](feature_importance.png)\n\n")
         

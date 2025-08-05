@@ -2,6 +2,7 @@ import joblib
 import pandas as pd
 import numpy as np
 import os
+import sys
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
@@ -13,7 +14,16 @@ EXPECTED_CLASSES = ['setosa', 'versicolor', 'virginica']
 def test_model_exists():
     """Test if model file exists and loads correctly"""
     # Try different possible paths for the model file
-    model_paths = ['../src/model.joblib']
+    # Get the absolute path to the project root directory
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    
+    model_paths = [
+        os.path.join(src_dir, 'model.joblib'),
+        os.path.join(root_dir, 'model.joblib'),
+        'model.joblib'
+    ]
     model = None
     
     for path in model_paths:
@@ -29,7 +39,16 @@ def test_model_exists():
     assert isinstance(model, DecisionTreeClassifier)
     
     # Check if metadata file exists in any of the expected locations
-    metadata_paths = ['../src/model_metadata.json']
+    # Get the absolute path to the project root directory
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    
+    metadata_paths = [
+        os.path.join(src_dir, 'model_metadata.json'),
+        os.path.join(root_dir, 'model_metadata.json'),
+        'model_metadata.json'
+    ]
     metadata_exists = False
     
     for path in metadata_paths:
@@ -43,7 +62,16 @@ def test_model_exists():
 def test_model_accuracy():
     """Test if model has reasonable accuracy"""
     # Try different possible paths for the model file
-    model_paths = ['../src/model.joblib']
+    # Get the absolute path to the project root directory
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    
+    model_paths = [
+        os.path.join(src_dir, 'model.joblib'),
+        os.path.join(root_dir, 'model.joblib'),
+        'model.joblib'
+    ]
     model = None
     
     for path in model_paths:
@@ -56,7 +84,16 @@ def test_model_accuracy():
     assert model is not None, "Could not find model.joblib in any of the expected locations"
     
     # Try different possible paths for the dataset
-    data_paths = ['../src/iris.csv']
+    # Get the absolute path to the project root directory
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    
+    data_paths = [
+        os.path.join(src_dir, 'iris.csv'),
+        os.path.join(root_dir, 'iris.csv'),
+        'iris.csv'
+    ]
     data = None
     
     for path in data_paths:
@@ -81,7 +118,16 @@ def test_model_accuracy():
 def test_model_structure():
     """Test if model has expected structure"""
     # Try different possible paths for the model file
-    model_paths = ['../src/model.joblib']
+    # Get the absolute path to the project root directory
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    
+    model_paths = [
+        os.path.join(src_dir, 'model.joblib'),
+        os.path.join(root_dir, 'model.joblib'),
+        'model.joblib'
+    ]
     model = None
     
     for path in model_paths:
@@ -101,11 +147,23 @@ def test_model_structure():
 
 def test_data_exists():
     """Test if the dataset file exists"""
-    assert os.path.exists('../src/iris.csv'), "Dataset file not found"
+    # Get the absolute path to the project root directory
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    
+    data_path = os.path.join(src_dir, 'iris.csv')
+    assert os.path.exists(data_path), f"Dataset file not found at {data_path}"
     
 def test_data_format():
     """Test if the dataset has the expected format"""
-    data = pd.read_csv('../src/iris.csv')
+    # Get the absolute path to the project root directory
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    
+    data_path = os.path.join(src_dir, 'iris.csv')
+    data = pd.read_csv(data_path)
     
     # Check columns
     assert set(data.columns) == set(EXPECTED_COLUMNS), f"Expected columns {EXPECTED_COLUMNS}, got {data.columns.tolist()}"
@@ -121,7 +179,13 @@ def test_data_format():
 
 def test_data_quality():
     """Test data quality (no missing values, valid ranges)"""
-    data = pd.read_csv('../src/iris.csv')
+    # Get the absolute path to the project root directory
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    
+    data_path = os.path.join(src_dir, 'iris.csv')
+    data = pd.read_csv(data_path)
     
     # Check for missing values
     assert data.isnull().sum().sum() == 0, "Dataset contains missing values"
@@ -135,7 +199,16 @@ def test_data_quality():
 def test_model_predictions_shape():
     """Test if model predictions have the expected shape"""
     # Try different possible paths for the model file
-    model_paths = ['../src/model.joblib']
+    # Get the absolute path to the project root directory
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    root_dir = os.path.dirname(test_dir)
+    src_dir = os.path.join(root_dir, 'src')
+    
+    model_paths = [
+        os.path.join(src_dir, 'model.joblib'),
+        os.path.join(root_dir, 'model.joblib'),
+        'model.joblib'
+    ]
     model = None
     
     for path in model_paths:

@@ -89,7 +89,7 @@ def train_model(X_train, y_train):
     """
     logger.info("Training Decision Tree Classifier")
     
-    model = DecisionTreeClassifier(max_depth=4, random_state=1)
+    model = DecisionTreeClassifier(max_depth=3, random_state=1)
     model.fit(X_train, y_train)
     
     logger.info("Model training completed")
@@ -138,7 +138,9 @@ def main():
     # Ensure we're in the right directory
     
     # Load and process data
-    data = load_data('iris.csv')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(script_dir, 'iris.csv')
+    data = load_data(data_path)
     X_train, X_test, y_train, y_test = preprocess_data(data)
     
     # Train model
@@ -148,8 +150,9 @@ def main():
     accuracy = evaluate_model(model, X_test, y_test)
     
     # Save model in multiple locations to ensure it's accessible
-    #save_model(model, "../model.joblib")
-    save_model(model, "model.joblib")  # Also save in current directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    save_model(model, os.path.join(script_dir, "model.joblib"))  # Save in src directory
+    save_model(model, os.path.join(os.path.dirname(script_dir), "model.joblib"))  # Save in root directory
     
     # Save model metadata
     metadata = {
@@ -161,8 +164,11 @@ def main():
     # Save metadata as JSON in multiple locations
     import json
     
-    # Also save in current directory
-    with open('model_metadata.json', 'w') as f:
+    # Save metadata in multiple locations
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(script_dir, 'model_metadata.json'), 'w') as f:
+        json.dump(metadata, f, indent=2)
+    with open(os.path.join(os.path.dirname(script_dir), 'model_metadata.json'), 'w') as f:
         json.dump(metadata, f, indent=2)
     
     logger.info("Training pipeline completed successfully")
